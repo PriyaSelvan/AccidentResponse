@@ -18,8 +18,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,14 +76,18 @@ public class MainActivity extends AppCompatActivity {
 // Instantiate the RequestQueue.
                     RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                     String url ="http://www.google.com";
+                    url = "http://10.0.0.195:4996/query";
+
+                    JSONObject js = new JSONObject();
+                    js.put("location","12345");
 
 // Request a string response from the provided URL.
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                            new Response.Listener<String>() {
+                    JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url,js,
+                            new Response.Listener<JSONObject>() {
                                 @Override
-                                public void onResponse(String response) {
+                                public void onResponse(JSONObject response) {
                                     // Display the first 500 characters of the response string.
-                                    mTextView.setText("Response is: "+ response.substring(0,500));
+                                    mTextView.setText("Response is: ");
                                 }
                             }, new Response.ErrorListener() {
                         @Override
