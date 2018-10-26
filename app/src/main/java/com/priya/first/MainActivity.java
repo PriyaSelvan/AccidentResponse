@@ -79,10 +79,11 @@ public class MainActivity extends AppCompatActivity{
 // Instantiate the RequestQueue.
                     RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                     String url ="http://www.google.com";
-                    url = "http://10.0.0.195:4996/query";
+                    url = "http://10.201.14.191:4996/query";
+                    //toNumber = "17203458680";
 
                     JSONObject js = new JSONObject();
-                    js.put("location","12345");
+                    js.put("location","6666");
 
 // Request a string response from the provided URL.
                     JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url,js,
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity{
                                     // Display the first 500 characters of the response string.
                                     try {
                                         String data = response.toString(2);
-                                        toNumber = response.get("phone").toString();
+                                        toNumber = response.get("serverdata").toString();
                                         mTextView.setText("Response is: "+toNumber);
 
 
@@ -112,6 +113,10 @@ public class MainActivity extends AppCompatActivity{
 
 // Add the request to the RequestQueue.
                     queue.add(stringRequest);
+
+
+
+
                 }
                 catch (Exception e){
                     e.printStackTrace();
