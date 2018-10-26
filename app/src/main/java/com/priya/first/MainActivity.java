@@ -22,12 +22,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     TextView total;
     EditText percen;
+
+    public static String toNumber;
 
 
     @Override
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         Button whatsapp = (Button) findViewById(R.id.whatsapp_button);
         final TextView mTextView = (TextView) findViewById(R.id.text);
 
-        final String toNumber = "17203458680";
+
         final String text = "Hi. I am at the accident spot! What can I help with ?";
 
         post.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +90,18 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     // Display the first 500 characters of the response string.
-                                    mTextView.setText("Response is: ");
+                                    try {
+                                        String data = response.toString(2);
+                                        toNumber = response.get("phone").toString();
+                                        mTextView.setText("Response is: "+toNumber);
+
+
+                                    }
+                                    catch(JSONException e) {
+                                        System.out.println("JSON Exception");
+                                    }
+
+
                                 }
                             }, new Response.ErrorListener() {
                         @Override
