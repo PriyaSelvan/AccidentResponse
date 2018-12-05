@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity{
     TextView total;
     EditText percen;
 
-    public static String toNumber;
+    public static String ambulance_num;
+    public static String police_num;
 
 
     @Override
@@ -53,7 +54,9 @@ public class MainActivity extends AppCompatActivity{
         final EditText percentage_text = (EditText) findViewById(R.id.percentage_text);*/
 
         final Button post = (Button) findViewById(R.id.calc_button);
-        Button whatsapp = (Button) findViewById(R.id.whatsapp_button);
+        final Button whatsapp = (Button) findViewById(R.id.whatsapp_button);
+        final Button police = (Button) findViewById(R.id.police_button);
+        final Button stop = (Button) findViewById(R.id.stop_button);
         final TextView mTextView = (TextView) findViewById(R.id.text);
 
 
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity{
 // Instantiate the RequestQueue.
                     RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                     String url ="http://www.google.com";
-                    url = "http://10.201.14.191:4996/query";
+                    url = "http://10.0.0.52:4996/query";
                     //toNumber = "17203458680";
 
                     JSONObject js = new JSONObject();
@@ -92,9 +95,82 @@ public class MainActivity extends AppCompatActivity{
                                 public void onResponse(JSONObject response) {
                                     // Display the first 500 characters of the response string.
                                     try {
+                                        String s[];
                                         String data = response.toString(2);
-                                        toNumber = response.get("serverdata").toString();
-                                        mTextView.setText("Response is: "+toNumber);
+                                        System.out.println(data);
+                                        s = response.get("serverdata").toString().split("-");
+                                        ambulance_num = s[0];
+                                        police_num = s[1];
+                                        mTextView.setText("Response is: "+s[0]);
+
+
+                                    }
+                                    catch(JSONException e) {
+                                        System.out.println("JSON Exception");
+                                    }
+
+
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            mTextView.setText("That didn't work!");
+                        }
+                    });
+
+// Add the request to the RequestQueue.
+                    queue.add(stringRequest);
+
+
+
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                float percentage = Float.parseFloat(percentage_text.getText().toString());
+                String res;
+                if(percentage > 50)
+                    res = "more";
+                else
+                    res = "less";
+                totalTextView.setText(res);*/
+
+                try {
+
+
+// ...
+
+// Instantiate the RequestQueue.
+                    RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                    String url ="http://www.google.com";
+                    url = "http://10.0.0.52:4996/query";
+                    //toNumber = "17203458680";
+
+                    JSONObject js = new JSONObject();
+                    js.put("location","stop");
+
+// Request a string response from the provided URL.
+                    JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url,js,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    // Display the first 500 characters of the response string.
+                                    try {
+                                        String s;
+                                        String data = response.toString(2);
+                                        System.out.println(data);
+                                        s = response.get("serverdata").toString();
+                                        mTextView.setText("Response is: "+s);
 
 
                                     }
@@ -143,7 +219,33 @@ public class MainActivity extends AppCompatActivity{
                 try {
 
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+toNumber +"&text="+text));
+                    intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+ambulance_num +"&text="+text));
+                    startActivity(intent);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
+        police.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                float percentage = Float.parseFloat(percentage_text.getText().toString());
+                String res;
+                if(percentage > 50)
+                    res = "more";
+                else
+                    res = "less";
+                totalTextView.setText(res);*/
+
+                try {
+
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+police_num +"&text="+text));
                     startActivity(intent);
                 }
                 catch (Exception e){
